@@ -1,0 +1,62 @@
+[
+  {
+    "id": 101,
+    "name": "Thomas A.",
+    "town": "Wittenburg",
+    "kwp": 12.5,
+    "batterySoc": 78,
+    "runtimeDays": 132,
+    "year": {
+      "pvDirect": 2850,
+      "batteryDis": 1420,
+      "gridBuy": 980,
+      "gridSell": 1650
+    },
+    "now": {
+      "pv": 2430,
+      "home": 1750,
+      "grid": -680,
+      "bat": 180
+    }
+  },
+  {
+    "id": 102,
+    "name": "Volker J.",
+    "town": "Hagenow",
+    "kwp": 22.0,
+    "batterySoc": 55,
+    "runtimeDays": 89,
+    "year": {
+      "pvDirect": 4120,
+      "batteryDis": 2210,
+      "gridBuy": 1450,
+      "gridSell": 3250
+    },
+    "now": {
+      "pv": 3150,
+      "home": 2900,
+      "grid": -250,
+      "bat": -420
+    }
+  },
+  {
+    "id": 103,
+    "name": "Moritz S.",
+    "town": "Boizenburg",
+    "kwp": 9.8,
+    "batterySoc": 91,
+    "runtimeDays": 57,
+    "year": {
+      "pvDirect": 1980,
+      "batteryDis": 920,
+      "gridBuy": 640,
+      "gridSell": 880
+    },
+    "now": {
+      "pv": 980,
+      "home": 740,
+      "grid": 0,
+      "bat": 120
+    }
+  }
+]
