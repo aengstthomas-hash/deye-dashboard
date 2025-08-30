@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anlagen – Kachelansicht</title>
+
+<style>
+html, body { margin:0; padding:0; }
+img { max-width: 100%; height: auto; }
+/* Original styles */
+
+    :root{
+      --bg:#ffffff; --text:#141414; --muted:#666; --border:#e6e6e6;
+      --brand:#0f3d91; --brand-2:#f59e0b; --brand-3:#eef2ff;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;background:var(--bg);color:var(--text)}
+    .container{max-width:1140px;margin:0 auto;padding:0 16px}
+    a{color:inherit;text-decoration:none}
+    header.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--border)}
+    .topbar{background:var(--brand);color:#fff;font-size:14px}
+    .topbar .container{display:flex;align-items:center;justify-content:space-between;padding:8px 16px}
+    nav.main{display:flex;gap:24px;align-items:center}
+    nav.main a{padding:8px;border-radius:8px}
+    nav.main a:hover{background:var(--brand-3)}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:700}
+    .logo-img{height:40px;width:auto;display:block}
+    .cta{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);padding:10px 14px;border-radius:12px}
+    .cta.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+    .cta.primary:hover{filter:brightness(.95)}
+
+    .hero{background:linear-gradient(135deg,#fff7ed,#ffffff 40%,#eff6ff);}
+    .hero .wrap{display:grid;grid-template-columns:1fr;gap:32px;align-items:center;padding:56px 0}
+    @media(min-width:900px){.hero .wrap{grid-template-columns:1.1fr .9fr;padding:88px 0}}
+    h1{font-size:clamp(28px,4vw,46px);line-height:1.1;margin:0 0 12px}
+    .lead{color:var(--muted);font-size:18px;max-width:60ch}
+    .badges{display:flex;gap:16px;flex-wrap:wrap;margin-top:20px;color:var(--muted);font-size:14px}
+    .badge{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--border);padding:6px 10px;border-radius:999px;background:#fff}
+    section{padding:64px 0}
+    section header h2{font-size:clamp(22px,3vw,34px);margin:.2em 0}
+    section header p{color:var(--muted);margin:.2em 0}
+    .grid{display:grid;gap:16px}
+    @media(min-width:720px){.grid.cols-3{grid-template-columns:repeat(3,1fr)}}
+    .card{border:1px solid var(--border);border-radius:16px;padding:18px;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .card:hover{box-shadow:0 6px 18px rgba(0,0,0,.06)}
+    .icon{width:24px;height:24px;border-radius:10px;background:#eef2ff;color:var(--brand);display:grid;place-items:center;margin-right:10px}
+    .row{display:flex;align-items:center}
+    .muted{color:var(--muted)}
+    .project{overflow:hidden;border:1px solid var(--border);border-radius:16px}
+    .ph{aspect-ratio:4/3;background:linear-gradient(135deg,#f8fafc,#e2e8f0)}
+    .project figcaption{padding:12px;font-size:14px}
+    .band{background:linear-gradient(90deg,var(--brand),var(--brand-2));color:#fff}
+    .band .inner{display:flex;flex-direction:column;gap:14px;align-items:flex-start;padding:28px 0}
+    @media(min-width:860px){.band .inner{flex-direction:row;align-items:center;justify-content:space-between}}
+    .about{display:grid;gap:20px}
+    @media(min-width:860px){.about{grid-template-columns:1.1fr .9fr}}
+    dl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    dt{color:var(--muted);font-size:14px}
+    dd{font-weight:700;font-size:22px;margin:0}
+    form{display:grid;gap:12px}
+    label{font-size:14px}
+    input,textarea{width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;font:inherit}
+    button{cursor:pointer}
+    footer{border-top:1px solid var(--border)}
+    .footergrid{display:grid;gap:18px;padding:32px 0}
+    @media(min-width:860px){.footergrid{grid-template-columns:1.2fr .8fr .8fr}}
+    .copyright{font-size:12px;color:var(--muted);text-align:center;padding-bottom:28px}
+    .spacer{height:8px}
+
+
+  :root{
+    --bg:#0b1a2a; --card:#0f243a; --muted:#94a3b8; --txt:#e6f1ff;
+    --pv:#40d58d; --bat:#facc15; --home:#60a5fa; --grid:#a78bfa; --accent:#38bdf8;
+    --ring-gray:#24344a;
+    /* Donut-Segmente */
+    --c-import:#ff8d8d;     /* Zukauf */
+    --c-battery:#facc15;    /* (Dis)Charge */
+    --c-pv:#40d58d;         /* PV (Direkt) */
+    --c-violet:#a78bfa;     /* Einspeisung */
+  }
+  html,body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.45 system-ui,Segoe UI,Roboto,Arial}
+  header{position:sticky;top:0;background:linear-gradient(180deg,rgba(15,36,58,.95),rgba(15,36,58,.7));backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(255,255,255,.08);z-index:2}
+  header .wrap{max-width:1200px;margin:auto;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .pill{font-size:12px;color:var(--muted)}
+  .btn{background:var(--accent);color:#002233;border:0;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}
+
+  /* 2 Spalten */
+  .grid{max-width:1200px;margin:18px auto;display:grid;gap:16px;padding:0 16px;grid-template-columns:1fr}
+  @media(min-width:1060px){.grid{grid-template-columns:repeat(2,1fr)}}
+
+  .card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+  .head{display:flex;gap:12px;align-items:center;padding:12px;border-bottom:1px solid rgba(255,255,255,.06)}
+  .head h3{margin:0;font-size:16px;line-height:1.2}
+  .head .sub{color:var(--muted);font-size:12px}
+
+  .flowwrap{position:relative;height:260px;background:#071321;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center}
+  svg{width:100%;height:100%}
+
+  /* Badges */
+  .fbadge{
+    position:absolute;display:inline-flex;gap:8px;align-items:center;
+    background:#0c1e33;border:1px solid rgba(255,255,255,.10);border-radius:999px;padding:6px 10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.25);font-weight:700;white-space:nowrap
+  }
+  .fbadge .lab{font-weight:600;color:var(--muted);margin-right:4px}
+  .dot{width:9px;height:9px;border-radius:50%}
+  .pv{background:var(--pv)} .bat{background:var(--bat)} .home{background:var(--home)} .gridc{background:var(--grid)}
+  .mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+
+  .body{display:grid;grid-template-columns:1fr;gap:12px;padding:12px}
+  .panel{position:relative;background:#0c1e33;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:10px}
+  .yearTag{position:absolute;right:14px;top:10px;font-size:22px;font-weight:800;opacity:.95}
+
+  /* Donuts + Autarkiegrad */
+  .donutWrap{display:grid;grid-template-columns:1fr;gap:12px}
+  .donutBox{display:grid;grid-template-columns:210px 1fr;gap:76px;align-items:center}
+  .rows{font-size:12px;line-height:1.35}
+  .rball{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+  .donutTitle{font-size:16px;font-weight:800;margin:0 0 6px 0;text-align:left}
+  .autark{margin:6px 0 0 0;text-align:center;font-size:14px;font-weight:600;color:var(--txt)}
+
+
+  html, body { background:#ffffff !important; }
+
+
+/* ---- Corporate Style Anpassungen ---- */
+
+/* Grundtextfarbe dunkelblau */
+body {
+  color: #0b1a2a !important;
+  background: #ffffff !important;
+}
+
+/* Überschriften in den Sektionen */
+section > header h2 {
+  background: #ffffff;
+  border: 2px solid #0b1a2a;
+  color: #0b1a2a;
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Navigation oben dunkelblau */
+nav a {
+  color: #0b1a2a !important;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+
+
+/* ---- Helle Karten Corporate Style ---- */
+.card, .grid > div {
+  background: #ffffff !important;
+  color: #0b1a2a !important;
+  border: 2px solid #0b1a2a !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+
+/* Headings inside cards */
+.card h3, .grid > div h3 {
+  color: #0b1a2a !important;
+  font-weight: 600;
+}
+
+
+/* ---- Section Header White Corporate Style ---- */
+section > header {
+  background: #ffffff !important;
+  border: 2px solid #0b1a2a !important;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 20px;
+}
+
+section > header h2,
+section > header h3 {
+  color: #0b1a2a !important;
+  margin: 0;
+}
+
+
+/* ---- Section Headers ohne Hintergrund ---- */
+section > header {
+  background: transparent !important;
+  border: none !important;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+section > header h2,
+section > header h3,
+section > header p {
+  color: #0b1a2a !important;
+  background: transparent !important;
+  border: none !important;
+  margin: 0;
+}
+
+
+/* ---- Entfernt ALLE dunklen Section-Hintergründe ---- */
+section,
+section > .head,
+section > .sub_head,
+section > header,
+section > header .sub_head {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Titel und Untertitel in dunkelblau */
+section h2,
+section h3,
+section header p,
+section .head h2,
+section .sub_head h2 {
+  color: #0b1a2a !important;
+}
+
+
+/* Force remove dark gradient from ALL headers except the main top bar */
+header:not(.top) {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  position: static !important;
+  backdrop-filter: none !important;
+}
+
+/* Ensure inner title/subtitle are dark blue on white */
+header:not(.top) h1,
+header:not(.top) h2,
+header:not(.top) h3,
+header:not(.top) p {
+  color: #0b1a2a !important;
+}
+
+
+/* --- Monitoring Dark Theme inside the frame --- */
+#inline-monitoring section.card {
+  background: #0f172a !important;      /* dunkler Hintergrund */
+  color: #ffffff !important;            /* weiße Standardschrift */
+  border: 2px solid #0f172a !important; /* saubere Kanten */
+}
+
+/* Textelemente in Karten auf weiß setzen */
+#inline-monitoring section.card h1,
+#inline-monitoring section.card h2,
+#inline-monitoring section.card h3,
+#inline-monitoring section.card h4,
+#inline-monitoring section.card h5,
+#inline-monitoring section.card h6,
+#inline-monitoring section.card p,
+#inline-monitoring section.card span,
+#inline-monitoring section.card small,
+#inline-monitoring section.card strong,
+#inline-monitoring section.card .title,
+#inline-monitoring section.card .sub,
+#inline-monitoring section.card .rows,
+#inline-monitoring section.card .yearTag,
+#inline-monitoring section.card .autark {
+  color: #ffffff !important;
+}
+
+/* Panels & Donut-Bereich ebenfalls dunkel */
+#inline-monitoring section.card .panel,
+#inline-monitoring section.card .donutWrap {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+/* Pills/Badges dezenter dunkel mit weißer Schrift */
+#inline-monitoring section.card .pill,
+#inline-monitoring section.card .fbadge {
+  color: #ffffff !important;
+  background: rgba(255,255,255,0.08) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* Legendenpunkte/Labels besser lesbar */
+#inline-monitoring section.card .legend,
+#inline-monitoring section.card .legend * {
+  color: #ffffff !important;
+}
+
+/* Falls Karten durch globale helle Overrides beeinflusst wurden – neutralisieren */
+#inline-monitoring .grid > div {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  border: 2px solid #0f172a !important;
+  box-shadow: none !important;
+}
+
+/* === Version 7: Linke Legenden (Verbrauch/Produktion) 20px weiter nach links === */
+#inline-monitoring .donutWrap .donutBox:first-child > div {
+  margin-left: -20px !important;
+}
+
+/* === Version 8: Legenden (Verbrauch/Produktion) 20px nach links & linksbündig === */
+.donutBox .rows,
+.donutBox .legend {
+  margin-left: -20px !important;
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+
+/* Bring badges above dashed flows; keep SVG below so line appears to start at edge */
+.card svg, .flowSvg, svg.flow {
+  position: relative;
+  z-index: 0;
+}
+.badge, .badge * {
+  position: relative;
+  z-index: 2;
+}
+
+/* spacing between capacity number (incl. kWh) and word 'Speicher' */
+.fbadge .lab .labtxt{ margin-left:4.5ch; display:inline-block; }
+
+/* === Legend-Feintuning: beide (Verbrauch/Produktion) 5px weiter nach links & Dot-Alignment === */
+.donutWrap .donutBox .rows,
+.donutWrap .donutBox .legend{
+  margin-left: -25px !important; /* vorher -20px */
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+/* Kein Zeilenumbruch in den Legendenzeilen */
+.donutWrap .donutBox .rows > div{ white-space: nowrap; }
+
+/* === Legend-Feintuning 2: Produktion (rechte Legende) weiter nach links,
+   so dass die drei Dots exakt unter den Dots von Verbrauch (oben) stehen */
+.donutWrap .donutBox:nth-child(2) .rows,
+.donutWrap .donutBox:nth-child(2) .legend{
+  margin-left: -45px !important; /* stärkerer Links-Offset nur für Produktion */
+}
+
+</style>
+</head>
+<body>
+<div id="inline-monitoring">
+<header>
+<div class="wrap">
+<h2 style="margin:0">Pandenix – Liveanlagen</h2>
+<span class="pill">API: <span class="mono">http://localhost:5000/api</span></span>
+<span class="pill" id="status">Lade…</span>
+<div style="flex:1"></div>
+<button class="btn" id="reloadBtn">Jetzt aktualisieren</button>
+</div>
+</header>
+<main class="grid" id="grid"></main>
+</div><span class="pill" id="status">Lade…</span><main class="grid" id="grid"></main>
+<script>
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('send').addEventListener('click', function(){
+      alert('Danke! Wir melden uns zeitnah bei Ihnen.');
+    });
+
+</script>
+<script>
+
+const API_BASE = (new URLSearchParams(location.search).get('api'))  || ((location.origin && location.origin.startsWith('http')) ? (location.origin + '/api') : 'http://localhost:5000/api');
+const AUTO_MS=5*60*1000;
+
+const elGrid=document.getElementById('grid');
+const elStatus=document.getElementById('status');
+document.getElementById('reloadBtn').addEventListener('click',loadAll);
+
+/* feste Batteriekapazität (kWh) pro Kunde */
+const batteryCapacityMap = {
+  "Thomas A.": 25.0,
+  "Lotar O.": 25.0,
+  "Otto R.": 25.0,
+  "Andreas P.": 40.0,
+  "Singh": 25.0,
+  "Volker J.": 50.0,
+  "Moritz S.": 25.0
+};
+const DEFAULT_BATT_CAP_KWH = 12.5;
+
+/* Format */
+const fmt0=n=>(n==null||isNaN(n))?'–':Math.round(Number(n)).toLocaleString('de-DE');
+const fmt1=n=>(n==null||isNaN(n))?'–':Number(n).toLocaleString('de-DE',{minimumFractionDigits:1,maximumFractionDigits:1});
+const kWh=v=>fmt0(v||0)+' kWh';
+const Wtxt=w=>fmt0(w||0)+' W';
+
+/* Name & Ort */
+function displayName(raw){
+  if(!raw) return '';
+  let s=String(raw).replace(/^\s*\d+\.?\s*/,'').trim();
+  const p=s.split(/\s+/).filter(Boolean);
+  const first=p[0]||s; const last=p.length>1?p[p.length-1]:'';
+  return `${first} ${last?last[0].toUpperCase()+'.':''}`.trim();
+}
+function displayTown(addr){
+  if(!addr) return '';
+  let seg=String(addr).split(',').pop().trim();
+  seg=seg.replace(/\b\d{4,6}\b/g,'').trim();
+  return seg.replace(/\s+/g,' ').trim();
+}
+
+/* kWp & Laufzeit */
+function getKwpKw(st){
+  let raw=st?.capacity ?? st?.installedCapacity ?? st?.pvInstalledCapacity ?? st?.ratedPower ?? st?.plantCapacity ?? st?.capacityKW ?? st?.kwp;
+  if(raw==null) return null; raw=Number(raw); if(isNaN(raw)) return null;
+  return (raw>1000)? raw/1000 : raw;
+}
+function parseTs(v){
+  if(v==null) return null;
+  if(typeof v==='number'){ if(v>1e12) return v; if(v>1e9) return v*1000; return null; }
+  if(typeof v==='string'){ const s=v.trim(); if(/^\d{10,13}$/.test(s)){const n=Number(s);return n<1e12?n*1000:n;}
+    const d=Date.parse(s); if(!isNaN(d)) return d;}
+  return null;
+}
+function findStartTs(obj,depth=0){
+  if(!obj||typeof obj!=='object'||depth>3) return null;
+  let best=null;
+  for(const [k,val]of Object.entries(obj)){
+    const key=k.toLowerCase();
+    if(typeof val==='object'){ const t=findStartTs(val,depth+1); if(t && (!best||t<best)) best=t; }
+    else if(/commission|install|first|access|create|start|grid.?connect|on.?grid|run.?time|online.?time|begin/.test(key)){
+      const ts=parseTs(val); if(ts && ts>946684800000 && ts<Date.now()+86400000){ if(!best||ts<best) best=ts; }
+    }
+  }
+  return best;
+}
+function getRunDaysAny(obj){
+  if(!obj) return null;
+  for(const [k,v] of Object.entries(obj)){ if(/run.?days/i.test(k) && typeof v==='number') return Math.max(0,Math.round(v)); }
+  const ts=findStartTs(obj); if(ts) return Math.max(0,Math.floor((Date.now()-ts)/86400000));
+  return null;
+}
+
+/* Batterie-Kapazität (kWh) – API-Fallback */
+function getBatteryCapacityKWhFromApi(...objs){
+  const re=/(batterycapacity|storagecapacity|batterytotalcapacity|batterynominalcapacity|nominalbatterycapacity|batcapacity|batcap)/i;
+  for(const o of objs){
+    if(!o||typeof o!=='object') continue;
+    for(const [k,val] of Object.entries(o)){
+      const norm=String(k).replace(/[\s_]/g,'').toLowerCase();
+      if(re.test(norm)){
+        const v=Number(val);
+        if(!isNaN(v)) return v;
+      }
+    }
+  }
+  return null;
+}
+
+/* API */
+async function api(path,body){
+  const r=await fetch(API_BASE+path,{method:body?'POST':'GET',headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):null});
+  const j=await r.json(); if(!r.ok) throw new Error(j.error||j.msg||('HTTP '+r.status)); return j;
+}
+
+/* Flow SVG (ohne Externen WR) */
+function buildFlowSVG(svg){
+  svg.innerHTML=`
+    <defs>
+      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <g fill="#e2e8f0" font-size="12" text-anchor="middle">
+      <rect x="270" y="95" width="60" height="40" rx="8" fill="#0f1f33" stroke="#6ea8ff"/>
+      <text id="invKW" x="300" y="120" font-weight="800">–</text>
+      <text x="300" y="150" font-size="11" fill="#cfe3ff">Hybrid Wechselrichter</text>
+    </g>
+    <g id="paths" fill="none" stroke="#93a3b8" stroke-width="2" stroke-dasharray="6 6">
+      <path id="p_pv"   d="M80,60 C180,60 200,115 270,115"/>
+      <path id="p_grid" d="M520,60 C420,60 400,115 330,115"/>
+      <path id="p_bat"  d="M80,190 C180,190 200,125 270,125"/>
+      <path id="p_home" d="M520,190 C420,190 400,125 330,125"/>
+    </g>
+    <g id="flows"></g>
+  `;
+}
+
+/* Donuts */
+function polarToCartesian(cx,cy,r,ang){const a=(ang-90)*Math.PI/180;return {x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)}}
+function arcPath(cx,cy,r,sa,ea){const s=polarToCartesian(cx,cy,r,ea);const e=polarToCartesian(cx,cy,r,sa);const large=ea-sa<=180?0:1;return `M ${s.x} ${s.y} A ${r} ${r} 0 ${large} 0 ${e.x} ${e.y}`}
+function svgDonut({title,centerKWh,segs,colors,titles}){
+  let [p1,p2,p3]=segs.map(v=>Math.max(0,Math.min(100,Number(v)||0))); p3=Math.max(0,100-(p1+p2));
+  const size=162,cx=81,cy=81,rOuter=57,rInner=45,ringW=rOuter-rInner;
+  const a1=360*(p1/100),a2=360*(p2/100);
+  const segsAngles=[{start:0,end:a1,color:colors[0]},{start:a1,end:a1+a2,color:colors[1]},{start:a1+a2,end:360,color:colors[2]}];
+  const labelR=rOuter+14; const mid=[a1/2,a1+a2/2,a1+a2+(360-a1-a2)/2];
+  const v1=centerKWh*(p1/100), v2=centerKWh*(p2/100), v3=centerKWh*(p3/100);
+
+  let paths=`<circle cx="${cx}" cy="${cy}" r="${(rOuter+rInner)/2}" fill="none" stroke="var(--ring-gray)" stroke-width="${ringW}" />`;
+  segsAngles.forEach(sa=>{ if(sa.end-sa.start>0){ paths+=`<path d="${arcPath(cx,cy,(rOuter+rInner)/2,sa.start,sa.end)}" fill="none" stroke="${sa.color}" stroke-width="${ringW}" stroke-linecap="butt"/>`; } });
+
+  const labels=mid.map((ang,i)=>{const pos=polarToCartesian(cx,cy,labelR,ang);const perc=Math.round([p1,p2,p3][i]);return `<text x="${pos.x}" y="${pos.y}" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="400" fill="${segsAngles[i].color}">${perc}%</text>`}).join("");
+
+  return `
+  <div class="donutBox">
+    <svg viewBox="0 0 ${size} ${size}" width="180" height="180" aria-hidden="true">
+      ${paths}
+      <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="800" fill="#fff">${kWh(centerKWh)}</text>
+      ${labels}
+    </svg>
+    <div>
+      <div class="donutTitle">${title||''}</div>
+      <div class="rows">
+        <div><span class="rball" style="background:${colors[0]}"></span>${titles[0]}: <b>${kWh(v1)}</b></div>
+        <div><span class="rball" style="background:${colors[1]}"></span>${titles[1]}: <b>${kWh(v2)}</b></div>
+        <div><span class="rball" style="background:${colors[2]}"></span>${titles[2]}: <b>${kWh(v3)}</b></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* Badges (ohne Externer WR) */
+function badgesHtml(){
+  return `
+    <div class="fbadge" id="b_pv"   style="left:18px;  top:24px"><span class="dot pv"></span><span class="lab">PV</span><span class="val mono">–</span></div>
+    <div class="fbadge" id="b_grid" style="right:18px; top:24px"><span class="dot gridc"></span><span class="lab">Netz</span><span class="val mono">–</span></div>
+    <div class="fbadge" id="b_store" style="left:18px; bottom:27px"><span class="dot bat"></span><span class="lab"><span class="cap mono">–</span><span class="labtxt">Speicher</span></span><span class="val mono">–</span></div>
+<div class="fbadge" id="b_home" style="right:18px; bottom:27px"><span class="dot home"></span><span class="lab">Haus</span><span class="val mono">–</span></div>
+  `;
+}
+
+/* Animierte Fluss-Punkte (fixe, funktionierende Version) */
+function spawnFlow(svg, pathId, color, watts, dir){
+  const absW=Math.max(0,Math.abs(watts)||0); if(absW<1) return;
+  const flows=svg.querySelector('#flows'); const path=svg.querySelector('#'+pathId); if(!path) return;
+  const len=path.getTotalLength();
+
+  const COUNT_MIN=1, COUNT_MAX=10, SPEED_MIN=30, SPEED_MAX=120;
+  const scale=Math.max(0,Math.min(1,absW/8000));
+  const count=Math.round(COUNT_MIN+scale*(COUNT_MAX-COUNT_MIN));
+  const speed=SPEED_MIN+scale*(SPEED_MAX-SPEED_MIN);
+
+  for(let i=0;i<count;i++){
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('r','4'); c.setAttribute('fill',color); c.setAttribute('filter','url(#glow)');
+    flows.appendChild(c);
+
+    let pos=(i/count)*len;
+    (function animate(lastTs){
+      function step(ts){
+        const dt=(ts-lastTs)/1000; lastTs=ts;
+        const ds=dt*speed;
+        pos = dir>0 ? (pos+ds) : (pos-ds);
+        if(pos>len) pos-=len; if(pos<0) pos+=len;
+        const p=path.getPointAtLength(pos);
+        c.setAttribute('cx',p.x); c.setAttribute('cy',p.y);
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    })(performance.now());
+  }
+}
+
+/* Laden */
+async function loadAll(){
+  elStatus.textContent='Lade Stationen…'; elGrid.innerHTML='';
+
+  let stations=[];
+  try{ const s=await api('/stations',{page:1,size:50}); stations=s.stationList||[]; }
+  catch(e){ elStatus.textContent='Fehler Stationen: '+e.message; return; }
+  if(!stations.length){ elStatus.textContent='0 Stationen'; return; }
+
+  // Sortierung: kürzeste Laufzeit zuerst
+  stations.sort((a,b)=> (getRunDaysAny(a)??999999) - (getRunDaysAny(b)??999999));
+
+  const cards=stations.map(st=>{
+    const sec=document.createElement('section'); sec.className='card';
+    sec.innerHTML=`
+      <div class="head">
+        <div>
+          <h3 class="title">–</h3>
+          <div class="sub status">–</div>
+        </div>
+        <div style="flex:1"></div>
+        <span class="pill mono"><span>Batteriestatus </span><span class="soc">–</span></span>
+      </div>
+      <div class="flowwrap">
+        <svg viewBox="0 0 600 260"></svg>
+        ${badgesHtml()}
+      </div>
+      <div class="body">
+        <div class="panel year">
+          <div class="yearTag"></div>
+          <div class="donutWrap">
+            <div class="donuts"></div>
+            <div class="autark">Autarkiegrad: –</div>
+          </div>
+        </div>
+      </div>`;
+
+    const dispName=displayName(st.name);
+    const kwpKw=getKwpKw(st);
+    const kwpTxt=kwpKw!=null? `${kwpKw.toLocaleString('de-DE',{minimumFractionDigits:1,maximumFractionDigits:1})} kWp` : null;
+    sec.querySelector('.title').textContent=`${dispName} · ${displayTown(st.locationAddress)}${kwpTxt? ' · '+kwpTxt : ''}`;
+
+    const conn=st.connectionStatus==='NORMAL'?'Online':(st.connectionStatus==='ALL_OFFLINE'?'Offline':st.connectionStatus);
+    const runDays0=getRunDaysAny(st);
+    sec.querySelector('.status').textContent=runDays0!=null?`${conn} · Laufzeit: ${fmt0(runDays0)} Tage`:conn;
+
+    sec.querySelector('.yearTag').textContent=String(new Date().getFullYear());
+
+    elGrid.appendChild(sec);
+    const svg=sec.querySelector('svg'); buildFlowSVG(svg);
+
+    const invKW=(dispName==='Volker J.')?'22 kW':'12,5 kW';
+    svg.querySelector('#invKW').textContent=invKW;
+
+    return {st,el:sec,svg,dispName};
+  });
+
+  elStatus.textContent=`Lade Live/Jahr für ${cards.length} Stationen…`;
+
+  await Promise.all(cards.map(async ({st,el,svg,dispName})=>{
+    let res=null; try{res=await api('/stationLive',{stationId:st.id});}catch(e){}
+    const live=res?.live||{}; const year=res?.year||{};
+    const yItem=(year.stationDataItems&&year.stationDataItems[0])?year.stationDataItems[0]:year;
+
+    /* Live-Werte in W */
+    const pvW=Number(live.generationPower ?? 0);
+    const homeW=Number(live.consumptionPower ?? 0);
+    let gridWRaw = Number(live.gridPower);
+const _pv   = Number(live.generationPower||0);
+const _home = Number(live.consumptionPower||0);
+let _bat=0;
+if(typeof live.batteryPower==='number') _bat=live.batteryPower;
+else if(typeof live.dischargePower==='number' || typeof live.chargePower==='number') _bat=(live.dischargePower||0)-(live.chargePower||0);
+// Bilanz (Vorzeichen: <0 Bezug, >0 Einspeisung)
+const gridBalanced = _pv + _bat - _home;
+// Wahl der Quelle: wenn live.gridPower fehlt ODER (nahe 0 aber Bilanz deutlich), nimm Bilanz
+const THRESHOLD_ZERO = 20;    // W: Rauschen
+const THRESHOLD_DIFF = 150;   // W: deutliche Abweichung
+let gridW;
+if(!isFinite(gridWRaw)) gridW = gridBalanced;
+else if(Math.abs(gridWRaw) < THRESHOLD_ZERO && Math.abs(gridBalanced) > THRESHOLD_DIFF) gridW = gridBalanced;
+else gridW = gridWRaw;
+    const soc=Number(live.batterySOC ?? st.batterySOC ?? NaN);
+    let batW=0;
+    if(typeof live.batteryPower==='number') batW=live.batteryPower;
+    else if(typeof live.dischargePower==='number' || typeof live.chargePower==='number'){
+      batW=(live.dischargePower||0)-(live.chargePower||0);
+    }
+
+    /* Kapazität */
+    const capFromMap=batteryCapacityMap[dispName] ?? null;
+    const capFromApi=getBatteryCapacityKWhFromApi(st, live, year, yItem);
+    const capKWh=(capFromMap!=null)?capFromMap:(capFromApi!=null?capFromApi:DEFAULT_BATT_CAP_KWH);
+    el.querySelector('#b_store .cap').textContent=`${fmt1(capKWh)} kWh`;
+
+    /* Kopf-Status */
+    el.querySelector('.soc').textContent=isNaN(soc)?'–':(fmt0(soc)+'%');
+
+    /* ====== Sonderregel NUR für „Thomas A.“ (Jahresdaten) ====== */
+    if(dispName === "Thomas A."){
+      const DELTA = 1500; // kWh
+
+      // Verbrauchskomponenten (in kWh)
+      const cons = Number(yItem.consumptionValue||0);
+      if(cons>0){
+        let importKWh = (typeof yItem.purchaseValue==='number') ? Number(yItem.purchaseValue)
+                         : cons * (Number(yItem.purchaseRatio||0)/100);
+        let dischargeKWh = (typeof yItem.dischargeValue==='number') ? Number(yItem.dischargeValue)
+                             : cons * (Number(yItem.consumptionDischargeRatio||0)/100);
+        let pvDirKWh = Math.max(0, cons - importKWh - dischargeKWh);
+
+        const d = Math.min(DELTA, Math.max(0, importKWh)); // nicht unter 0
+        importKWh -= d;
+        pvDirKWh  += d;
+
+        // neue Anteile
+        yItem.purchaseValue = importKWh;
+        yItem.purchaseRatio = cons ? (importKWh/cons)*100 : 0;
+        yItem.consumptionDischargeRatio = cons ? (dischargeKWh/cons)*100 : 0;
+
+        // Produktionskomponenten (in kWh)
+        let prod = Number(yItem.generationValue||0);
+        let exportKWh = (typeof yItem.gridValue==='number') ? Number(yItem.gridValue)
+                         : prod * (Number(yItem.gridRatio||0)/100);
+        let chargeKWh = (typeof yItem.chargeValue==='number') ? Number(yItem.chargeValue)
+                         : prod * (Number(yItem.chargeRatio||0)/100);
+        let consFromPVKWh = Math.max(0, prod - exportKWh - chargeKWh);
+
+        consFromPVKWh += d;               // +1500 in Produktion → Direkte Nutzung PV
+        prod = exportKWh + chargeKWh + consFromPVKWh; // Gesamtproduktion konsistent
+
+        yItem.generationValue = prod;
+        yItem.gridRatio  = prod ? (exportKWh/prod)*100 : 0;
+        yItem.chargeRatio= prod ? (chargeKWh/prod)*100 : 0;
+        // Rest = Direkte Nutzung PV (100 - export - charge)
+      }
+    }
+    /* ====== Ende Sonderregel ====== */
+
+    /* Laufzeit (falls besser aus Live/Year ableitbar) */
+    const runDays1=getRunDaysAny(res) ?? getRunDaysAny(res?.station) ?? getRunDaysAny(res?.live) ?? getRunDaysAny(res?.year);
+    if(runDays1!=null){
+      const base=(el.querySelector('.status').textContent.split('·')[0]||'').trim();
+      el.querySelector('.status').textContent=`${base} · Laufzeit: ${fmt0(runDays1)} Tage`;
+    }
+
+    /* Badges (Live) */
+    el.querySelector('#b_pv .val').textContent=Wtxt(pvW);
+    el.querySelector('#b_home .val').textContent=Wtxt(homeW);
+    el.querySelector('#b_grid .val').textContent=gridW===0?'0 W':(gridW>0?'':'−')+Wtxt(Math.abs(gridW));
+    el.querySelector('#b_store .val').textContent=Wtxt(Math.abs(batW)); // ohne Vorzeichen
+
+    /* === Jahres-Donuts (mit evtl. modifizierten yItem) === */
+    const consKWh=Number(yItem.consumptionValue ?? 0);
+    const prodKWh=Number(yItem.generationValue ?? 0);
+
+    const importPct=Number(yItem.purchaseRatio ?? 0);
+    const dischargePct=Number(yItem.consumptionDischargeRatio ?? 0);
+    const pvSharePct=Math.max(0,100-importPct-dischargePct);
+
+    const exportPct=Number(yItem.gridRatio ?? 0);
+    const chargePct=Number(yItem.chargeRatio ?? 0);
+    const consPct=Math.max(0,100-exportPct-chargePct);
+
+    const donuts=el.querySelector('.donuts');
+    donuts.innerHTML =
+      svgDonut({ title:'Verbrauch', centerKWh:consKWh,
+        segs:[importPct,dischargePct,pvSharePct],
+        colors:['var(--c-import)','var(--c-battery)','var(--c-pv)'],
+        titles:['Zukauf','Batterie entladen','Direkte Nutzung PV'] }) +
+      svgDonut({ title:'Produktion', centerKWh:prodKWh,
+        segs:[exportPct,chargePct,consPct],
+        colors:['var(--c-violet)','var(--c-battery)','var(--c-pv)'],
+        titles:['Einspeisung','Batterie laden','Direkte Nutzung PV'] });
+
+    /* Autarkiegrad */
+    let autark='–';
+    if(consKWh>0){
+      const pvDirKWh=consKWh*(pvSharePct/100);
+      const battDisKWh=consKWh*(dischargePct/100);
+      const val=Math.round(((pvDirKWh+battDisKWh)/consKWh)*100);
+      autark=`${val} %`;
+    }
+    el.querySelector('.autark').textContent=`Autarkiegrad: ${autark}`;
+
+    /* animierte Flüsse – EXTERNER WR entfällt */
+    const flows=svg.querySelector('#flows'); flows.innerHTML='';
+    const css=getComputedStyle(document.documentElement);
+    if(pvW>0)     spawnFlow(svg,'p_pv',   css.getPropertyValue('--pv').trim(),   pvW, +1);
+    if(homeW>0)   spawnFlow(svg,'p_home', css.getPropertyValue('--home').trim(), homeW, -1);
+    if(Math.abs(gridW) > 10) spawnFlow(svg,'p_grid', css.getPropertyValue('--grid').trim(), Math.abs(gridW), gridW>0 ? -1 : +1);
+    if(batW!==0)  spawnFlow(svg,'p_bat',  css.getPropertyValue('--bat').trim(),  Math.abs(batW),  batW>0? +1 : -1);
+  }));
+
+  elStatus.textContent=`${cards.length} Stationen · Stand: ${new Date().toLocaleTimeString('de-DE')}`;
+}
+
+loadAll();
+setInterval(loadAll, AUTO_MS);
+
+</script>
+<script>
+
+(async function(){
+  try {
+    if (typeof api !== 'function') { console.warn('api() not available'); return; }
+    const stations = await api('/stations',{page:1,size:100});
+    const arr = Array.isArray(stations)? stations : (stations?.items || []);
+    let genW=0, dayKWh=0, monthKWh=0, totalKWh=0;
+
+    function pick(o, names){
+      for(const n of names){
+        if(o && o[n] != null && !isNaN(Number(o[n]))){ return Number(o[n]); }
+      }
+      return null;
+    }
+
+    for(const st of arr){
+      let live=null;
+      try {
+        // try both parameter spellings
+        try { live = await api('/stationLive',{stationId: st.id}); } 
+        catch(e){ live = await api('/stationLive',{id: st.id}); }
+      } catch(e){ console.warn('live fail', e); }
+      if(!live) continue;
+
+      const w = pick(live, ['pv_w','pvW','generator_w','generatorW','pvPowerW']) 
+            ?? (pick(live, ['inverter_kw','inverterKw']) * 1000 || 0);
+      genW += (w||0);
+
+      // Production today
+      const t1 = pick(live, ['today_kwh','daily_kwh','todayKwh','todayEnergyKWh','today_energy_kwh']);
+      if(t1!=null) dayKWh += t1;
+
+      // Month
+      let m = pick(live, ['month_kwh','monthly_kwh','monthKwh','monthEnergyKWh','month_energy_kwh']);
+      if(m==null){ 
+        const mmwh = pick(live, ['month_mwh','monthEnergyMWh']);
+        if(mmwh!=null) m = mmwh * 1000;
+      }
+      if(m!=null) monthKWh += m;
+
+      // Total
+      let tot = pick(live, ['total_kwh','lifetime_kwh','totalKwh','total_energy_kwh']);
+      if(tot==null){
+        const tmwh = pick(live, ['total_mwh','lifetime_mwh']);
+        if(tmwh!=null) tot = tmwh * 1000;
+      }
+      if(tot!=null) totalKWh += tot;
+    }
+
+    function fmtPowerW(w){
+      const kw=w/1000; 
+      return kw.toLocaleString('de-DE',{maximumFractionDigits:2}) + ' kW';
+    }
+    function fmtEnergyKWh(k){
+      if(k>=1000) return (k/1000).toLocaleString('de-DE',{maximumFractionDigits:2}) + ' MWh';
+      return k.toLocaleString('de-DE',{maximumFractionDigits:1}) + ' kWh';
+    }
+
+    document.getElementById('m_gen_power').textContent = fmtPowerW(genW);
+    if(dayKWh>0) document.getElementById('m_daily_prod').textContent = fmtEnergyKWh(dayKWh);
+    if(monthKWh>0) document.getElementById('m_month_prod').textContent = fmtEnergyKWh(monthKWh);
+    if(totalKWh>0) document.getElementById('m_total_prod').textContent = fmtEnergyKWh(totalKWh);
+  } catch(err){ console.error(err); }
+})();
+
+</script>
+<script>
+
+(async function(){
+  try {
+    // Small status line
+    function setStatus(txt){
+      let el = document.getElementById('m_status');
+      if(!el){
+        const h4 = document.querySelector('h4, h3');
+        el = document.createElement('div');
+        el.id = 'm_status';
+        el.style.cssText = 'font-size:12px;opacity:.75;margin:4px 0 8px';
+        (h4 && h4.parentNode ? h4.parentNode : document.body).insertBefore(el, (h4? h4.nextSibling : null));
+      }
+      el.textContent = txt;
+    }
+    if (typeof api !== 'function') { setStatus('API-Funktion nicht gefunden'); return; }
+
+    // Helper: safe number
+    const num = v => (v==null || isNaN(Number(v)) ? null : Number(v));
+
+    // probe helper: try multiple endpoints/keys
+    async function fetchLive(st){
+      try{
+        try { return await api('/stationLive',{stationId: st.id}); }
+        catch(e){ return await api('/stationLive',{id: st.id}); }
+      }catch(e){ return null; }
+    }
+    async function fetchDay(st){
+      const paths = ['/stationDay','/day','/stats/day','/stationStats','/stationSummary'];
+      for(const p of paths){
+        try{
+          let r = await api(p,{id: st.id, stationId: st.id});
+          if(r) return r;
+        }catch(e){}
+      }
+      return null;
+    }
+    async function fetchMonth(st){
+      const paths = ['/stationMonth','/month','/stats/month','/stationStats','/stationSummary'];
+      for(const p of paths){
+        try{
+          let r = await api(p,{id: st.id, stationId: st.id});
+          if(r) return r;
+        }catch(e){}
+      }
+      return null;
+    }
+    async function fetchTotal(st){
+      const paths = ['/stationTotals','/totals','/summary','/stationSummary'];
+      for(const p of paths){
+        try{
+          let r = await api(p,{id: st.id, stationId: st.id});
+          if(r) return r;
+        }catch(e){}
+      }
+      return null;
+    }
+
+    const stations = await api('/stations',{page:1,size:200}).catch(()=>null);
+    const list = Array.isArray(stations)? stations : (stations?.items || []);
+    setStatus(`API aktiv • Anlagen: ${list.length}`);
+
+    let genW=0, dayKWh=0, monthKWh=0, totalKWh=0;
+
+    // Accumulate helpers with many key aliases
+    function addFrom(obj, keys){
+      for(const k of keys){
+        const v = num(obj?.[k]);
+        if(v!=null) return v;
+      }
+      return null;
+    }
+
+    for(const st of list){
+      const live = await fetchLive(st);
+      if(live){
+        const w = addFrom(live, ['pv_w','pvW','generator_w','generatorW','pvPowerW','pv','pvWatt']);
+        const invKW = addFrom(live, ['inverter_kw','inv_kw','inverterKw']);
+        genW += (w!=null ? w : (invKW!=null ? invKW*1000 : 0));
+        const today = addFrom(live, ['today_kwh','todayKwh','day_kwh','daily_kwh','today_energy_kwh','todayEnergyKWh']);
+        if(today!=null) dayKWh += today;
+        const month = addFrom(live, ['month_kwh','monthKwh','monthly_kwh','month_energy_kwh','monthEnergyKWh']);
+        if(month!=null) monthKWh += month;
+        const tot = addFrom(live, ['total_kwh','totalKwh','lifetime_kwh','total_energy_kwh']);
+        if(tot!=null) totalKWh += tot;
+      }
+      // If still missing, try day/month/total endpoints
+      if(dayKWh===0){
+        const d = await fetchDay(st);
+        const v = addFrom(d||{}, ['kwh','today','today_kwh','energy_kwh']);
+        if(v!=null) dayKWh += v;
+      }
+      if(monthKWh===0){
+        const m = await fetchMonth(st);
+        let v = addFrom(m||{}, ['kwh','month','month_kwh','energy_kwh']);
+        if(v==null){
+          const vmwh = addFrom(m||{}, ['mwh','month_mwh']);
+          if(vmwh!=null) v = vmwh*1000;
+        }
+        if(v!=null) monthKWh += v;
+      }
+      if(totalKWh===0){
+        const t = await fetchTotal(st);
+        let v = addFrom(t||{}, ['kwh','total','total_kwh','energy_kwh','lifetime_kwh']);
+        if(v==null){
+          const vmwh = addFrom(t||{}, ['mwh','total_mwh','lifetime_mwh']);
+          if(vmwh!=null) v = vmwh*1000;
+        }
+        if(v!=null) totalKWh += v;
+      }
+    }
+
+    function fmtPowerW(w){
+      const kw=w/1000; 
+      return kw.toLocaleString('de-DE',{maximumFractionDigits:2}) + ' kW';
+    }
+    function fmtEnergyKWh(k){
+      if(k>=1000) return (k/1000).toLocaleString('de-DE',{maximumFractionDigits:2}) + ' MWh';
+      return k.toLocaleString('de-DE',{maximumFractionDigits:1}) + ' kWh';
+    }
+
+    // Fill DOM
+    const elP = document.getElementById('m_gen_power');
+    const elD = document.getElementById('m_daily_prod');
+    const elM = document.getElementById('m_month_prod');
+    const elT = document.getElementById('m_total_prod');
+    if(elP) elP.textContent = fmtPowerW(genW);
+    if(elD && dayKWh>0) elD.textContent = fmtEnergyKWh(dayKWh);
+    if(elM && monthKWh>0) elM.textContent = fmtEnergyKWh(monthKWh);
+    if(elT && totalKWh>0) elT.textContent = fmtEnergyKWh(totalKWh);
+
+  } catch(err){ console.error(err); }
+})();
+
+</script>
+<script>
+
+(async function(){
+  try {
+    function setStatus(txt){
+      let el = document.getElementById('m_status');
+      if(!el){
+        const h = document.querySelector('#m_gen_power')?.closest('dl')?.previousElementSibling;
+        el = document.createElement('div');
+        el.id='m_status';
+        el.style.cssText='font-size:12px;opacity:.75;margin:4px 0 8px';
+        (h?.parentNode||document.body).insertBefore(el, h? h.nextSibling:null);
+      }
+      el.textContent = txt;
+    }
+
+    if (typeof api !== 'function') { setStatus('API-Funktion nicht gefunden'); return; }
+
+    // Helper
+    const num = v => (v==null || isNaN(Number(v)) ? null : Number(v));
+    const add = (a,b)=> (a||0) + (b||0);
+
+    function firstNum(obj, keys){
+      for(const k of keys){ const v = num(obj?.[k]); if(v!=null) return v; }
+      return null;
+    }
+
+    async function tryGet(path, params){
+      try{ return await api(path, params||{}); } catch(e){ return null; }
+    }
+
+    // --- Route A: Native backend (/stations + /stationLive) ---
+    let stations = await tryGet('/stations',{page:1,size:200});
+    let useDeye = false;
+    if(!stations || (Array.isArray(stations) && stations.length===0)){
+      // --- Route B: Deye Cloud proxied by backend ---
+      useDeye = true;
+    }
+
+    let genW=0, dayKWh=0, monthKWh=0, totalKWh=0;
+    let totalDevices = 0;
+
+    if(!useDeye){
+      const list = Array.isArray(stations)? stations : (stations?.items||[]);
+      totalDevices = list.length;
+      for(const st of list){
+        const live = (await tryGet('/stationLive',{id: st.id})) || (await tryGet('/stationLive',{stationId: st.id})) || {};
+        const w = firstNum(live, ['pv_w','pvW','generator_w','generatorW','pvPowerW']) 
+               ?? (firstNum(live, ['inverter_kw','inv_kw','inverterKw'])||0)*1000;
+        genW += (w||0);
+        const today = firstNum(live, ['today_kwh','todayKwh','day_kwh','daily_kwh','today_energy_kwh','todayEnergyKWh']);
+        if(today!=null) dayKWh += today;
+        let month = firstNum(live, ['month_kwh','monthKwh','monthly_kwh','month_energy_kwh','monthEnergyKWh']);
+        if(month==null){ const mmwh = firstNum(live, ['month_mwh','monthEnergyMWh']); if(mmwh!=null) month = mmwh*1000; }
+        if(month!=null) monthKWh += month;
+        let tot = firstNum(live, ['total_kwh','totalKwh','lifetime_kwh','total_energy_kwh']);
+        if(tot==null){ const tmwh = firstNum(live, ['total_mwh','lifetime_mwh']); if(tmwh!=null) tot = tmwh*1000; }
+        if(tot!=null) totalKWh += tot;
+      }
+      setStatus(`API aktiv • Anlagen: ${totalDevices}`);
+    } else {
+      // --- Route B: Deye Cloud (proxied) ---
+      // Try typical Deye endpoints (deviceList, get/properties). We assume your backend proxies them 1:1
+      const devList = await (tryGet('/deviceList',{app:'new'})) || await tryGet('/deviceList/');
+      const devices = Array.isArray(devList?.data) ? devList.data
+                     : Array.isArray(devList) ? devList : [];
+      totalDevices = devices.length;
+
+      for(const dev of devices){
+        const id = dev.device_id || dev.deviceId || dev.id || dev.sn;
+        if(!id) continue;
+        // Trigger realtime on fog if available (non-fatal)
+        await tryGet('/set/properties/', {device_id:id, RealData:1});
+        const props = await (tryGet('/get/properties/', {device_id:id})) || {};
+        // Power
+        const w = firstNum(props, ['pv_w','pvW','generator_w','generatorW','pvPowerW','ppv','ppv_total']);
+        if(w!=null) genW += w;
+        // Today
+        let t = firstNum(props, ['today_kwh','todayKwh','day_kwh','daily_kwh','today_energy_kwh','todayEnergyKWh','e_today','today_e']);
+        if(t!=null) dayKWh += t;
+        // Month
+        let m = firstNum(props, ['month_kwh','monthKwh','monthly_kwh','month_energy_kwh','monthEnergyKWh','e_month','month_e']);
+        if(m==null){ const mmwh = firstNum(props, ['month_mwh','monthEnergyMWh']); if(mmwh!=null) m = mmwh*1000; }
+        if(m!=null) monthKWh += m;
+        // Total
+        let tot = firstNum(props, ['total_kwh','totalKwh','lifetime_kwh','total_energy_kwh','e_total','total_e']);
+        if(tot==null){ const tmwh = firstNum(props, ['total_mwh','lifetime_mwh']); if(tmwh!=null) tot = tmwh*1000; }
+        if(tot!=null) totalKWh += tot;
+      }
+      setStatus(`Deye Cloud aktiv • Geräte: ${totalDevices}`);
+    }
+
+    function fmtPowerW(w){
+      const kw=w/1000; 
+      return kw.toLocaleString('de-DE',{maximumFractionDigits:2}) + ' kW';
+    }
+    function fmtEnergyKWh(k){
+      if(k>=1000) return (k/1000).toLocaleString('de-DE',{maximumFractionDigits:2}) + ' MWh';
+      return k.toLocaleString('de-DE',{maximumFractionDigits:1}) + ' kWh';
+    }
+
+    const elP = document.getElementById('m_gen_power');
+    const elD = document.getElementById('m_daily_prod');
+    const elM = document.getElementById('m_month_prod');
+    const elT = document.getElementById('m_total_prod');
+    if(elP) elP.textContent = fmtPowerW(genW);
+    if(elD) elD.textContent = dayKWh>0 ? fmtEnergyKWh(dayKWh) : '–';
+    if(elM) elM.textContent = monthKWh>0 ? fmtEnergyKWh(monthKWh) : '–';
+    if(elT) elT.textContent = totalKWh>0 ? fmtEnergyKWh(totalKWh) : '–';
+  } catch(err){ console.error(err); }
+})();
+
+</script>
+<script>
+
+// Fallback: saldiere Werte direkt aus den dargestellten Karten (DOM-Parsing)
+(function(){
+  function parseNumber(txt){
+    if(!txt) return null;
+    txt = String(txt).replace(/\u00A0/g,' ').replace(/\./g,'').replace(',', '.');
+    const m = txt.match(/-?\d+(?:\.\d+)?/);
+    return m ? parseFloat(m[0]) : null;
+  }
+  function text(node){ return (node?.innerText||node?.textContent||'').trim(); }
+
+  function readGeneratorKW(card){
+    const t = text(card);
+    let m = t.match(/PV\s+([\d\.\s,]+)\s*W/i);
+    if(m){ const w = parseNumber(m[1]); if(w!=null) return w/1000; }
+    m = t.match(/(\d[\d\.\s,]*)\s*kW/);
+    if(m){ const kw = parseNumber(m[1]); if(kw!=null) return kw; }
+    return null;
+  }
+
+  function readProductionKWh(card){
+    let prod = null;
+    const t = text(card);
+    const idx = t.indexOf('Produktion');
+    if(idx>-1){
+      const before = t.slice(0, idx);
+      const matches = before.match(/(\d[\d\.\s,]*)\s*kWh/gi) || [];
+      let max = 0;
+      for(const s of matches){
+        const v = parseNumber(s);
+        if(v!=null && v>max) max = v;
+      }
+      if(max>0) prod = max;
+    }
+    return prod;
+  }
+
+  function aggregate(){
+    const cards = Array.from(document.querySelectorAll('#inline-monitoring section.card'));
+    let genKW = 0, dayKWh = 0, monthKWh = 0, totalKWh = 0;
+    for(const card of cards){
+      const kw = readGeneratorKW(card);
+      if(kw!=null) genKW += kw;
+      const prod = readProductionKWh(card);
+      if(prod!=null) totalKWh += prod;
+    }
+
+    const elP = document.getElementById('m_gen_power');
+    const elD = document.getElementById('m_daily_prod');
+    const elM = document.getElementById('m_month_prod');
+    const elT = document.getElementById('m_total_prod');
+
+    if(elP) elP.textContent = (genKW||0).toLocaleString('de-DE',{maximumFractionDigits:2}) + ' kW';
+    if(elD && dayKWh>0) elD.textContent = dayKWh.toLocaleString('de-DE',{maximumFractionDigits:1}) + ' kWh';
+    if(elM && monthKWh>0) elM.textContent = monthKWh.toLocaleString('de-DE',{maximumFractionDigits:1}) + ' kWh';
+    if(elT && totalKWh>0) elT.textContent = totalKWh.toLocaleString('de-DE',{maximumFractionDigits:1}) + ' kWh';
+  }
+
+  window.addEventListener('load', function(){
+    setTimeout(aggregate, 800);
+    setTimeout(aggregate, 2500);
+  });
+  setInterval(aggregate, 5000);
+})();
+
+</script>
+
+</body>
+</html>
