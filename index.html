@@ -369,7 +369,8 @@ header:not(.top) p {
 </script>
 <script>
 
-const API_BASE = (new URLSearchParams(location.search).get('api'))  || ((location.origin && location.origin.startsWith('http')) ? (location.origin + '/api') : 'http://localhost:5000/api');
+const API_BASE = (new URLSearchParams(location.search).get('api')) 
+    || (location.origin + location.pathname.replace(/\/[^/]*$/, '/stations-demo.json'));
 const AUTO_MS=5*60*1000;
 
 const elGrid=document.getElementById('grid');
@@ -1145,6 +1146,46 @@ setInterval(loadAll, AUTO_MS);
   setInterval(aggregate, 5000);
 })();
 
+</script>
+
+
+<script>
+(function(){
+  const qp = new URLSearchParams(location.search);
+  const api = qp.get('api');
+  const DEFAULT = 'stations-demo.json'; // must exist in the same folder as index.html
+  const base = api || DEFAULT;
+  const infoEl = document.getElementById('inline-monitoring') || document.body;
+  const showErr = (e) => {
+    const p = document.createElement('p');
+    p.style.color = 'crimson';
+    p.textContent = 'Fehler beim Laden: ' + e;
+    infoEl.appendChild(p);
+  };
+  fetch(base).then(r=>{
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return r.json();
+  }).then(arr=>{
+    // quick render if your normal JS is missing
+    const grid = document.getElementById('grid') || document.body;
+    arr.forEach(s=>{
+      const div = document.createElement('div');
+      div.style.border='1px solid #ddd'; div.style.borderRadius='14px'; div.style.padding='16px'; div.style.margin='12px 0';
+      const cons = (s.year.pvDirect + s.year.batteryDis + s.year.gridBuy) || 1;
+      const aut = Math.round(((s.year.pvDirect + s.year.batteryDis)/cons)*100);
+      div.innerHTML = `<h3 style="margin:0 0 6px 0;font-family:system-ui">${(s.name||'Anlage').split(' ').slice(-1)[0]} · ${s.town||''} · ${(s.kwp||0).toFixed(1).replace('.',',')} kWp</h3>
+        <div style="font:14px system-ui;opacity:.8;margin-bottom:6px">Batteriestatus ${Math.round(s.batterySoc||0)}% • Laufzeit: ${Math.round(s.runtimeDays||0)} Tage</div>
+        <div style="font:14px system-ui;margin:8px 0">Autarkiegrad: ${aut} %</div>
+        <div style="display:flex;gap:6px;font:13px system-ui">
+          <div>PV: ${Math.round(s.now.pv||0)} W</div>
+          <div>Haus: ${Math.round(s.now.home||0)} W</div>
+          <div>Netz: ${Math.round(s.now.grid||0)} W</div>
+          <div>${(s.now.bat||0)>=0?'Batterie laden':'Batterie entladen'}: ${Math.abs(Math.round(s.now.bat||0))} W</div>
+        </div>`;
+      grid.appendChild(div);
+    });
+  }).catch(err=>showErr(err));
+})();
 </script>
 
 </body>
